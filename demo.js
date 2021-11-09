@@ -7,34 +7,66 @@ import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import HomeIcon from '@mui/icons-material/Home';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import Fab from '@mui/material/Fab';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar';
 import WindowIcon from '@mui/icons-material/Window';
-function setKabinet() {
-  return <TextField id="filled-basic" label="Filled" variant="filled" />;
-}
-export default function FixedBottomNavigation() {
-  const [showList, setShowList] = React.useState(false);
-  const [showIcon, setShowIcon] = React.useState(false);
+import styles from './cssNavigation.css';
 
+export default function FixedBottomNavigation() {
+  const [kabinet, setKabinets] = React.useState(0);
+  const [showList, setShowList] = React.useState(true);
+  const [showIcon, setShowIcon] = React.useState(false);
+  const setKabinetinList = () => {
+    messageExamples[0] = { primary: 'Кабинет', secondary: kabinet };
+  };
+  function ButtonSub() {
+    return (
+      <Button
+        sx={{ margin: 5, justifyContent: 'center' }}
+        variant="contained"
+        onClick={(setKabinetinList(), onClickFalse)}
+      >
+        Выбрать
+      </Button>
+    );
+  }
+  function setKabinet() {
+    return (
+      <TextField
+        id="filled-basic"
+        label="Введите кабинет"
+        variant="filled"
+        onChange={(e) => setKabinets(e.target.value)}
+      />
+    );
+  }
   const onClickTrue = () => {
     setShowList(true);
     setShowIcon(false);
   };
   const onClickFalse = () => {
-    setShowList(false);
-    setShowIcon(true);
+    if (kabinet != 0) {
+      setShowList(false);
+      setShowIcon(true);
+    } else {
+      setShowList(true);
+      setShowIcon(false);
+    }
   };
 
   return (
     <Box sx={{ pb: 7 }}>
       <CssBaseline />
       {showList ? (
-        <Box sx={{ paddingTop: 2, mx: 'auto', justifyContent: 'center' }}>
-          {setKabinet()}{' '}
+        <Box sx={{ padding: 10, mx: 'auto', justifyContent: 'center' }}>
+          {setKabinet()}
+          {ButtonSub()}
         </Box>
       ) : null}
       <List>
@@ -59,14 +91,23 @@ export default function FixedBottomNavigation() {
           }}
         >
           <BottomNavigationAction
+            variant="contained"
             label="Выбор Кабинета"
             onClick={onClickTrue}
-            icon={<HomeIcon />}
+            icon={showList ? <HomeIcon color="primary" /> : <HomeIcon />}
           />
+
           <BottomNavigationAction
+            variant="contained"
             label="Кабинет"
             onClick={onClickFalse}
-            icon={<MeetingRoomIcon />}
+            icon={
+              showIcon ? (
+                <MeetingRoomIcon color="primary" />
+              ) : (
+                <MeetingRoomIcon />
+              )
+            }
           />
         </BottomNavigation>
       </Paper>
@@ -75,6 +116,7 @@ export default function FixedBottomNavigation() {
 }
 
 const messageExamples = [
+  { primary: 'Кабинет' },
   {
     primary: 'Door',
     secondary: 'on',
